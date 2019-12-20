@@ -6,7 +6,7 @@ output = process.argv.4
 
 if !(fontfile and code and output) =>
   [fontfile,code,output] = [
-    "../sample/王漢宗正海報.ttf",
+    "../sample/NotoSansCJKtc-Regular.ttf",
     "的一是有在人不大中為以國會上了我年時來這他",
     "../output/subset.ttf"
   ]
