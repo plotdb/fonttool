@@ -11,16 +11,16 @@ if !(fontfile and code and output) =>
     "../output/subset.ttf"
   ]
   console.log "usage: lsc subset <fontfile> <codes/code.txt> <output-filename>"
-  console.log " - use default sample config instead:"
+  console.log " - sample config: "
   console.log "   fontfile: #fontfile"
   console.log "   code:     #code"
   console.log "   output:   #output"
+  process.exit -1
 
 if fs.exists-sync code => code = fs.read-file-sync code .toString!
 hash = {}
 for i from 0 til code.length => hash[code[i]] = true
 code = [k for k of hash].join('')
-console.log code
 fs-extra.ensure-dir-sync path.dirname(output)
 fm  = new fontmin!src fontfile
 fm.dest "."
