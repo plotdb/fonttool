@@ -2,6 +2,7 @@ require! <[fs fs-extra opentype.js fontmin progress gulp-rename colors path svgo
 
 filename = process.argv.2
 out-dir = process.argv.3 or '../output/svg/'
+chars = Array.from(process.argv.4 or '').map(-> it.charCodeAt(0))
 if !(filename and out-dir) =>
   console.log "usage: lsc path.ls <font-filename> <output-dir>"
   process.exit -1
@@ -14,11 +15,17 @@ progress-bar = (total = 10, text = "converting") ->
   )
   return bar
 
+console.log "loading font file #filename ..."
 opentype.load filename, (e, font) ->
+  if e =>
+    console.log "load font file failed. ", e
+    process.exit -1
   glyphs = font.glyphs.glyphs
   list = [0 til font.glyphs.length]
     .map(-> glyphs[it])
     .filter(->it and it.unicode)
+  if chars => list = list.filter(->it.unicode in chars)
+  console.log "total #{list.length} glyphs to convert."
   bar = progress-bar list.length, "converting"
   fs-extra.ensure-dir-sync out-dir
   out = []
